@@ -1,7 +1,9 @@
 package com.techprimers.micrometer.micrometerspringboot15.controller;
 
+import com.techprimers.micrometer.micrometerspringboot15.service.MetricService;
 import io.micrometer.core.annotation.Counted;
 import io.micrometer.core.annotation.Timed;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,15 +12,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/rest")
 public class HelloController {
 
-    @Timed(
+    @Autowired
+    private MetricService metricService;
+
+
+    /*@Timed(
             value = "techprimers.hello.request",
             histogram = true,
             percentiles = {0.95, 0.99},
             extraTags = {"version", "1.0"}
-    )
-
+    )*/
     @GetMapping("/hello")
     public String hello() {
+
+        metricService.meter("techprimers.hello.count").record(1);
         return "Hello Youtube";
     }
 

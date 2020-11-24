@@ -3,7 +3,9 @@ package com.techprimers.micrometer.micrometerspringboot15.config;
 
 import com.newrelic.telemetry.Attributes;
 import io.micrometer.NewRelicRegistryConfig;
+import io.micrometer.core.instrument.Meter;
 import io.micrometer.core.instrument.config.MeterFilter;
+import io.micrometer.core.instrument.distribution.DistributionStatisticConfig;
 import io.micrometer.core.instrument.util.NamedThreadFactory;
 //import com.newrelic.telemetry.micrometer.NewRelicRegistry;
 //import com.newrelic.telemetry.micrometer.NewRelicRegistryConfig;
@@ -45,7 +47,7 @@ public class NewRelicMetricsExportAutoConfiguration {
 
             @Override
             public Duration step() {
-                return Duration.ofSeconds(5);
+                return Duration.ofSeconds(10);
             }
 
             @Override
@@ -69,6 +71,18 @@ public class NewRelicMetricsExportAutoConfiguration {
                         .build();
         newRelicRegistry.config().meterFilter(MeterFilter.ignoreTags("plz_ignore_me"));
         newRelicRegistry.config().meterFilter(MeterFilter.denyNameStartsWith("jvm.threads"));
+        /*newRelicRegistry.config().meterFilter(
+               new MeterFilter() {
+                    @Override
+                    public DistributionStatisticConfig configure(Meter.Id id, DistributionStatisticConfig config) {
+                        return DistributionStatisticConfig.builder()
+                                .expiry(Duration.ofSeconds(10))
+                                .bufferLength(5)
+                                .percentiles(0.95)
+                                .build()
+                                .merge(config);
+                    }
+                });*/
         newRelicRegistry.start(new NamedThreadFactory("newrelic.micrometer.registry"));
         return newRelicRegistry;
     }
