@@ -58,7 +58,7 @@ public class NewRelicMetricsExportAutoConfiguration {
         };
     }
 
-   /* @Bean
+    @Bean
     public NewRelicRegistry newRelicMeterRegistry(NewRelicRegistryConfig config)
             throws UnknownHostException {
         NewRelicRegistry newRelicRegistry =
@@ -71,5 +71,5 @@ public class NewRelicMetricsExportAutoConfiguration {
         newRelicRegistry.config().meterFilter(MeterFilter.denyNameStartsWith("jvm.threads"));
         newRelicRegistry.start(new NamedThreadFactory("newrelic.micrometer.registry"));
         return newRelicRegistry;
-    }*/
+    }
 }

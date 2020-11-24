@@ -1,5 +1,6 @@
 package com.techprimers.micrometer.micrometerspringboot15.controller;
 
+import io.micrometer.core.annotation.Counted;
 import io.micrometer.core.annotation.Timed;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,27 +16,30 @@ public class HelloController {
             percentiles = {0.95, 0.99},
             extraTags = {"version", "1.0"}
     )
+
     @GetMapping("/hello")
     public String hello() {
         return "Hello Youtube";
     }
 
-    @Timed(
+   /* @Timed(
             value = "techprimers.hello2.request",
             histogram = true,
             percentiles = {0.95, 0.99},
             extraTags = {"version", "1.0"}
-    )
+    )*/
+    @Counted("techprimers.hello2.request")
     @GetMapping("/hello2")
     public String hello2() {
-        return "Hello Youtube";
+        return "Hello Youtube2";
     }
-    @Timed(
+   /* @Timed(
             value = "techprimers.hello2.request",
             histogram = true,
             percentiles = {0.95, 0.99},
             extraTags = {"version", "1.0"}
-    )
+    )*/
+
     @GetMapping("/hello3")
     public String hello3() {
         return "Hello Youtube";

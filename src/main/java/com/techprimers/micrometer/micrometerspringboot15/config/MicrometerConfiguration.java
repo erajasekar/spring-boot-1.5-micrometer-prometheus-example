@@ -8,12 +8,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MicrometerConfiguration {
 
-    @Bean
+  /*  @Bean
     MeterRegistryCustomizer meterRegistryCustomizer(MeterRegistry meterRegistry) {
         return meterRegistry1 -> {
           meterRegistry.config()
           .commonTags("application", "micrometer-youtube-example");
         };
-    }
+    }*/
 
 }
