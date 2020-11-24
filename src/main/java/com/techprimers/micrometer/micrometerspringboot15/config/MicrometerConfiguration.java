@@ -1,7 +1,7 @@
 package com.techprimers.micrometer.micrometerspringboot15.config;
 
 import io.micrometer.core.instrument.MeterRegistry;
-import io.micrometer.spring.autoconfigure.MeterRegistryCustomizer;
+import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
