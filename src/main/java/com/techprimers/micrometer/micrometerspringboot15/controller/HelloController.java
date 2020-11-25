@@ -3,6 +3,7 @@ package com.techprimers.micrometer.micrometerspringboot15.controller;
 import com.techprimers.micrometer.micrometerspringboot15.service.MetricService;
 import io.micrometer.core.annotation.Counted;
 import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.instrument.Timer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,16 +17,22 @@ public class HelloController {
     private MetricService metricService;
 
 
-    /*@Timed(
+    @Timed(
             value = "techprimers.hello.request",
             histogram = true,
             percentiles = {0.95, 0.99},
             extraTags = {"version", "1.0"}
-    )*/
+    )
     @GetMapping("/hello")
     public String hello() {
 
-        metricService.meter("techprimers.hello.count").record(1);
+       // metricService.meter("techprimers.hello.meter").record(3);
+        metricService.counter("techprimers.hello.counter").increment(1);
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return "Hello Youtube";
     }
 
@@ -35,9 +42,15 @@ public class HelloController {
             percentiles = {0.95, 0.99},
             extraTags = {"version", "1.0"}
     )*/
-    @Counted("techprimers.hello2.request")
     @GetMapping("/hello2")
     public String hello2() {
+        Timer.Sample timer = Timer.start(metricService.registry());
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        timer.stop(metricService.timer("techprimers.hello3.request"));
         return "Hello Youtube2";
     }
    /* @Timed(
