@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.concurrent.CompletableFuture;
+
 @RestController
 @RequestMapping("/rest")
 public class HelloController {
@@ -45,14 +47,28 @@ public class HelloController {
     @GetMapping("/hello2")
     public String hello2() {
         Timer.Sample timer = Timer.start(metricService.registry());
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        timer.stop(metricService.timer("techprimers.hello3.request"));
+        parseNumber("500").thenAccept(v ->  timer.stop(metricService.timer("techprimers.hello4.request")));
+        parseNumber("sdfsdf").thenAccept(v ->  timer.stop(metricService.timer("techprimers.hello5.request")))
+                .exceptionally( t -> {
+                    timer.stop(metricService.timer("techprimers.hello5.error"));
+                    return null;
+                });
         return "Hello Youtube2";
     }
+
+    private static CompletableFuture<Integer> parseNumber(String num){
+        return CompletableFuture.supplyAsync(() -> {
+            int result = Integer.parseInt(num);
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("done");
+            return result;
+        });
+    }
+
    /* @Timed(
             value = "techprimers.hello2.request",
             histogram = true,
